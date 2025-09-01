@@ -123,7 +123,8 @@ public class UserService {
         repository.deleteById(id);
     }
 
-    // Aceptar un lugar con un ID de cadena
+
+
     public boolean acceptPlace(String userId, String placeId) {
         User user = repository.findById(userId);
 
@@ -137,7 +138,6 @@ public class UserService {
         return false;
     }
 
-    // Rechazar un lugar con un ID de cadena
     public boolean rejectPlace(String userId, String placeId) {
         User user = repository.findById(userId);
 

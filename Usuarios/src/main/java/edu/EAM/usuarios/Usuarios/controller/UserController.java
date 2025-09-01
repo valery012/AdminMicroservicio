@@ -103,7 +103,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Nuevo endpoint para aceptar un lugar (simulado)
+
+
+
     @Operation(summary = "Aceptar un lugar para un usuario", description = "Simula que un admin acepta un lugar para un usuario")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lugar aceptado exitosamente"),
@@ -118,7 +120,9 @@ public class UserController {
         }
     }
 
-    // Nuevo endpoint para rechazar un lugar (simulado)
+
+
+
     @Operation(summary = "Rechazar un lugar para un usuario", description = "Simula que un admin rechaza un lugar para un usuario")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Lugar rechazado (o no estaba aceptado)"),
