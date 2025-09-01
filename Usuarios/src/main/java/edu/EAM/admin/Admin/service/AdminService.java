@@ -1,93 +1,88 @@
-package edu.EAM.usuarios.Usuarios.service;
+package edu.EAM.admin.Admin.service;
 
-import edu.EAM.usuarios.Usuarios.model.Address;
-import edu.EAM.usuarios.Usuarios.model.User;
+import edu.EAM.admin.Admin.model.Address;
+import edu.EAM.admin.Admin.model.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import edu.EAM.usuarios.Usuarios.repository.UserRepository;
+import edu.EAM.admin.Admin.repository.AdminRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class UserService {
-    private final UserRepository repository;
+public class AdminService {
+    private final AdminRepository repository;
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public AdminService(AdminRepository repository) {
         this.repository = repository;
         initSampleData();
     }
 
     private void initSampleData() {
         Address addr1 = new Address("Main St", "123", "Downtown", "New York", "10001");
-
-
-        save(new User(UUID.randomUUID().toString(), "Alice", "Female", "alice@example.com", "123456789", addr1, new ArrayList<>()));
+        save(new Admin(UUID.randomUUID().toString(), "Alice", "Female", "alice@example.com", "123456789", addr1));
 
         Address addr2 = new Address("Broadway", "456", "Midtown", "New York", "10002");
-        save(new User(UUID.randomUUID().toString(), "Bob", "Male", "bob@example.com", "987654321", addr2, new ArrayList<>()));
+        save(new Admin(UUID.randomUUID().toString(), "Bob", "Male", "bob@example.com", "987654321", addr2));
     }
 
-    public User save(User user) {
-        if (user.getId() == null) {
-            user.setId(UUID.randomUUID().toString());
+    public Admin save(Admin admin) {
+        if (admin.getId() == null) {
+            admin.setId(UUID.randomUUID().toString());
         }
-        return repository.save(user);
+        return repository.save(admin);
     }
 
-
-
-    public User findById(String id) {
+    public Admin findById(String id) {
         return repository.findById(id);
     }
 
-    public List<User> findAll() {
+    public List<Admin> findAll() {
         return repository.findAll();
     }
 
-    public List<User> findByName(String name) {
+    public List<Admin> findByName(String name) {
         return repository.findByNameContaining(name);
     }
 
-    public User update(User user) {
-        return repository.update(user);
+    public Admin update(Admin admin) {
+        return repository.update(admin);
     }
 
-    public User patch(String id, Map<String, Object> updates) {
-        User user = repository.findById(id);
-        if (user != null) {
+    public Admin patch(String id, Map<String, Object> updates) {
+        Admin admin = repository.findById(id);
+        if (admin != null) {
             updates.forEach((key, value) -> {
                 switch (key) {
                     case "name" -> {
                         String newName = (String) value;
                         if (newName != null && !newName.trim().isEmpty()) {
-                            user.setName(newName);
+                            admin.setName(newName);
                         }
                     }
                     case "gender" -> {
                         String newGender = (String) value;
                         if (newGender != null && !newGender.trim().isEmpty()) {
-                            user.setGender(newGender);
+                            admin.setGender(newGender);
                         }
                     }
                     case "email" -> {
                         String newEmail = (String) value;
                         if (newEmail != null && !newEmail.trim().isEmpty()) {
-                            user.setEmail(newEmail);
+                            admin.setEmail(newEmail);
                         }
                     }
                     case "phoneNumber" -> {
                         String newPhone = (String) value;
                         if (newPhone != null && !newPhone.trim().isEmpty()) {
-                            user.setPhoneNumber(newPhone);
+                            admin.setPhoneNumber(newPhone);
                         }
                     }
                     case "address" -> {
                         if (value instanceof Map<?, ?> addrMap) {
-                            Address current = user.getAddress();
+                            Address current = admin.getAddress();
                             String street = (String) addrMap.get("street");
                             if (street != null && !street.trim().isEmpty()) {
                                 current.setStreet(street);
@@ -108,12 +103,12 @@ public class UserService {
                             if (postalCode != null && !postalCode.trim().isEmpty()) {
                                 current.setPostalCode(postalCode);
                             }
-                            user.setAddress(current);
+                            admin.setAddress(current);
                         }
                     }
                 }
             });
-            return repository.update(user);
+            return repository.update(admin);
         }
         return null;
     }
@@ -121,31 +116,5 @@ public class UserService {
 
     public void deleteById(String id) {
         repository.deleteById(id);
-    }
-
-
-
-    public boolean acceptPlace(String userId, String placeId) {
-        User user = repository.findById(userId);
-
-        if (user != null) {
-            if (!user.getAcceptedPlaces().contains(placeId)) {
-                user.getAcceptedPlaces().add(placeId);
-                repository.save(user);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean rejectPlace(String userId, String placeId) {
-        User user = repository.findById(userId);
-
-        if (user != null) {
-            user.getAcceptedPlaces().remove(placeId);
-            repository.save(user);
-            return true;
-        }
-        return false;
     }
 }

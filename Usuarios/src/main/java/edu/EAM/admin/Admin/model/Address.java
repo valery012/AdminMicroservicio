@@ -1,5 +1,4 @@
-package edu.EAM.usuarios.Usuarios.model;
-
+package edu.EAM.admin.Admin.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
